@@ -2,13 +2,24 @@
 
 __author__ = "Matthew Egan"
 
+from datetime import timedelta
+from subprocess import Popen
 from sys import argv
+from time import time, sleep
 
 class HowLong:
     def __init__(self):
-        pass
+        self.command = " ".join(argv[1:])
 
     def run(self):
-        pass
+        print("Running", self.command)
+        process = Popen(argv[1:])
+        start_time = time()
+
+        while process.poll() is None:
+            sleep(1)
+            print(str(timedelta(seconds=int(time() - start_time))))
+
+        print("Finished", self.command)
 
 if __name__ == "__main__": HowLong().run()
