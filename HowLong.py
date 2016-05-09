@@ -7,6 +7,9 @@ from subprocess import Popen
 from sys import argv
 from time import time, sleep
 
+RED = '\033[91m'
+END = '\033[0m'
+
 class HowLong:
     def __init__(self):
         self.command = " ".join(argv[1:])
@@ -18,7 +21,7 @@ class HowLong:
 
         while process.poll() is None:
             sleep(1)
-            print('\033[91m', str(timedelta(seconds=int(time() - start_time))), '\033[0m')
+            print(RED + str(timedelta(seconds=int(time() - start_time))) + END)
 
         print("Finished", self.command)
 
