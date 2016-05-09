@@ -18,7 +18,7 @@ class HowLong:
 
         while process.poll() is None:
             sleep(1)
-            print(str(timedelta(seconds=int(time() - start_time))))
+            print('\033[91m', str(timedelta(seconds=int(time() - start_time))), '\033[0m')
 
         print("Finished", self.command)
 
