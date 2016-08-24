@@ -56,6 +56,6 @@ optional arguments:
 
 ## Contributing
 
-# Submitting an issue or feature request
+### Submitting an issue or feature request
 
 If you find an issue or have a feature request please open an issue at [Github HowLong Repo](https://github.com/mattjegan/howlong).
