@@ -1,10 +1,7 @@
-#!/usr/bin/env python3
-
-__author__ = "Matthew Egan"
-
+import argparse
 from datetime import timedelta
 from subprocess import Popen
-from sys import argv
+from sys import argv, exit
 from time import time, sleep
 
 RED = '\033[91m'
@@ -12,7 +9,12 @@ END = '\033[0m'
 
 class HowLong:
     def __init__(self):
-        self.command = " ".join(argv[1:])
+        parser = argparse.ArgumentParser(description='Time a process')
+        parser.add_argument('command', metavar='C', type=str, nargs='+',
+                            help='a valid command')
+        parsed_args = parser.parse_args()
+
+        self.command = " ".join(parsed_args.command)
 
     def run(self):
         print("Running", self.command)
