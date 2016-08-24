@@ -8,6 +8,12 @@ A simple command line application that lets you know how long your command has b
 
 ## Installation
 
+### From PyPi
+
+```
+pip install howlong
+```
+
 ### From source
 
 ```
