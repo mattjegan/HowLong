@@ -6,7 +6,7 @@ from time import time, sleep
 RED = '\033[91m'
 END = '\033[0m'
 
-class HowLong:
+class HowLong(object):
     def __init__(self):
         parser = argparse.ArgumentParser(description='Time a process')
         parser.add_argument('-i', type=float, nargs='?', metavar='interval',
