@@ -31,4 +31,7 @@ class HowLong:
 
         print("Finished", self.readable_command)
 
-if __name__ == "__main__": HowLong().run()
+def howlong():
+    HowLong().run()
+
+if __name__ == "__main__": howlong()
