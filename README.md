@@ -1,6 +1,8 @@
 # HowLong
 
-[![Build Status](https://travis-ci.org/mattjegan/HowLong.svg?branch=master)](https://travis-ci.org/mattjegan/HowLong) [![Code Health](https://landscape.io/github/mattjegan/HowLong/master/landscape.svg?style=flat)](https://landscape.io/github/mattjegan/HowLong/master)
+[![Build Status](https://travis-ci.org/mattjegan/HowLong.svg?branch=master)](https://travis-ci.org/mattjegan/HowLong)
+[![Code Health](https://landscape.io/github/mattjegan/HowLong/master/landscape.svg?style=flat)](https://landscape.io/github/mattjegan/HowLong/master)
+[![PyPI version](https://badge.fury.io/py/howlong.svg)](https://badge.fury.io/py/howlong)
 
 A simple command line application that lets you know how long your command has been running.
 
