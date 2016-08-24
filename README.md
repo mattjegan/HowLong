@@ -1,4 +1,7 @@
 # HowLong
+
+[![Build Status](https://travis-ci.org/mattjegan/HowLong.svg?branch=master)](https://travis-ci.org/mattjegan/HowLong) [![Code Health](https://landscape.io/github/mattjegan/HowLong/master/landscape.svg?style=flat)](https://landscape.io/github/mattjegan/HowLong/master)
+
 A simple command line application that lets you know how long your command has been running.
 
 ## Installation
