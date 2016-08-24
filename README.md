@@ -19,11 +19,11 @@ python setup.py install
 Time a command
 ```
 $ howlong python helloworld.py
-Running python3 helloworld.py
+Running python helloworld.py
 0:00:01.003903
 Hello, World!
 0:00:02.005022
-Finished python3 helloworld.py
+Finished python helloworld.py
 ```
 
 Change the interval at which `howlong` times
