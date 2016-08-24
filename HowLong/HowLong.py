@@ -1,9 +1,6 @@
-#!/anaconda/bin/python3
-
 import argparse
 from datetime import timedelta
 from subprocess import Popen
-from sys import argv, exit
 from time import time, sleep
 
 RED = '\033[91m'
