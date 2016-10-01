@@ -3,8 +3,12 @@ from datetime import timedelta
 from subprocess import Popen
 from time import time, sleep
 
-RED = '\033[91m'
-END = '\033[0m'
+
+def red(text):
+    RED = '\033[91m'
+    END = '\033[0m'
+    return RED + text + END
+
 
 class HowLong(object):
     def __init__(self):
@@ -27,7 +31,7 @@ class HowLong(object):
         while process.poll() is None:
             sleep(self.timer_interval)
             elapsed_time = (time() - start_time) * 1000
-            print(RED + str(timedelta(milliseconds=elapsed_time)) + END)
+            print(red(str(timedelta(milliseconds=elapsed_time))))
 
         print("Finished", self.readable_command)
 
