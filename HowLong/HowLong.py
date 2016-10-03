@@ -1,3 +1,5 @@
+from __future__ import print_function
+import sys
 import argparse
 from datetime import timedelta
 from subprocess import Popen
@@ -8,6 +10,11 @@ def red(text):
     RED = '\033[91m'
     END = '\033[0m'
     return RED + text + END
+
+
+def log(*args):
+    print(*args, file=sys.stderr)
+    sys.stderr.flush()
 
 
 class HowLong(object):
@@ -24,18 +31,20 @@ class HowLong(object):
         self.readable_command = " ".join(self.parsed_args.command)
 
     def run(self):
-        print("Running", self.readable_command)
+        log("Running", self.readable_command)
 
         process = Popen(self.parsed_args.command)
         start_time = time()
         while process.poll() is None:
             sleep(self.timer_interval)
             elapsed_time = (time() - start_time) * 1000
-            print(red(str(timedelta(milliseconds=elapsed_time))))
+            log(red(str(timedelta(milliseconds=elapsed_time))))
 
-        print("Finished", self.readable_command)
+        log("Finished", self.readable_command)
+
 
 def howlong():
     HowLong().run()
+
 
 if __name__ == "__main__": howlong()
