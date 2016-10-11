@@ -7,9 +7,7 @@ from time import time, sleep
 
 
 def red(text):
-    RED = '\033[91m'
-    END = '\033[0m'
-    return RED + text + END
+    return '\033[91m' + text + '\033[0m'
 
 
 def log(*args):
