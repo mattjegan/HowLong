@@ -1,6 +1,8 @@
 from __future__ import print_function
-import sys
+
 import argparse
+import sys
+
 from datetime import timedelta
 from subprocess import Popen
 from time import time, sleep
