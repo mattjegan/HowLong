@@ -43,8 +43,5 @@ class HowLong(object):
         log("Finished", self.readable_command)
 
 
-def howlong():
+if __name__ == "__main__":
     HowLong().run()
-
-
-if __name__ == "__main__": howlong()
