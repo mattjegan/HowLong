@@ -24,18 +24,22 @@ class HowLong(object):
         parser = argparse.ArgumentParser(description='Time a process')
         parser.add_argument('-i', type=float, nargs='?', metavar='interval',
                             help='the timer interval, defaults to 1 second')
-        parser.add_argument('command', metavar='C', type=str, nargs='+',
+        parser.add_argument('command', metavar='cmd', type=str, nargs=1,
                             help='a valid command')
-        self.parsed_args = parser.parse_args()
+        parser.add_argument('command_args', metavar='cmd_args', type=str,
+                            nargs=argparse.REMAINDER,
+                            help='additional arguments for target command')
+        parsed_args = parser.parse_args()
 
-        self.timer_interval = self.parsed_args.i if self.parsed_args.i else 1
+        self.timer_interval = parsed_args.i if parsed_args.i else 1
 
-        self.readable_command = " ".join(self.parsed_args.command)
+        self.command = parsed_args.command + parsed_args.command_args
+        self.readable_command = ' '.join(self.command)
 
     def run(self):
         log("Running", self.readable_command)
 
-        process = Popen(self.parsed_args.command)
+        process = Popen(self.command)
         start_time = time()
         while process.poll() is None:
             sleep(self.timer_interval)
