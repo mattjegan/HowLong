@@ -34,6 +34,16 @@ Hello, World!
 Finished python helloworld.py
 ```
 
+Time a process already running
+```
+$ howlong pid 1234
+DEBUG: Running ping -c 500 google.com
+INFO:0:01:05.915637
+.
+.
+Finished ping -c 500 google.com
+```
+
 Change the interval at which `howlong` times
 ```
 howlong -i 0.5 <command>
