@@ -42,7 +42,8 @@ class HowLong(object):
                             help='a valid command')
         parser.add_argument('-f', metavar='file', type=str, nargs=1,
                             help='output to file insted of stdout')
-        parser.add_argument('-l', metavar='log level', nargs=1,choices=['ERROR', 'INFO', 'DEBUG'],
+        parser.add_argument('-l', metavar='log level', nargs=1,
+                            choices=['ERROR', 'INFO', 'DEBUG'],
                             help='set log level to ERROR/INFO/DEBUG')
         parser.add_argument('command_args', metavar='cmd_args', type=str,
                             nargs=argparse.REMAINDER,
