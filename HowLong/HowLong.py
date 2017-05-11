@@ -36,11 +36,17 @@ class Process(object):
 class HowLong(object):
     def __init__(self):
         parser = argparse.ArgumentParser(description='Time a process')
-        parser.add_argument('-i', type=float, nargs='?', metavar='interval',help='the timer interval, defaults to 1 second')
-        parser.add_argument('command', metavar='cmd', type=str, nargs=1, help='a valid command')
-        parser.add_argument('-f', metavar='file', type=str, nargs=1,help='output to file insted of stdout')
-        parser.add_argument('-l', metavar='log level', nargs=1,choices=['ERROR', 'INFO', 'DEBUG'],help='set log level to ERROR/INFO/DEBUG')
-        parser.add_argument('command_args', metavar='cmd_args', type=str,nargs=argparse.REMAINDER,help='additional arguments for target command')
+        parser.add_argument('-i', type=float, nargs='?', metavar='interval',
+                            help='the timer interval, defaults to 1 second')
+        parser.add_argument('command', metavar='cmd', type=str, nargs=1,
+                            help='a valid command')
+        parser.add_argument('-f', metavar='file', type=str, nargs=1,
+                            help='output to file insted of stdout')
+        parser.add_argument('-l', metavar='log level', nargs=1,choices=['ERROR', 'INFO', 'DEBUG'],
+                            help='set log level to ERROR/INFO/DEBUG')
+        parser.add_argument('command_args', metavar='cmd_args', type=str,
+                            nargs=argparse.REMAINDER,
+                            help='additional arguments for target command')
         parsed_args = parser.parse_args()
 
         self.timer_interval = parsed_args.i if parsed_args.i else 1
@@ -74,12 +80,12 @@ class HowLong(object):
         process = Process(pid=self.pid,command=self.command)
         readable_command = process.command
         start_time = process.start_time
-        logging.debug(" Running " + readable_command)
+        logging.debug("Running " + readable_command)
         while process.is_running():
             sleep(self.timer_interval)
             elapsed_time = (time() - start_time) * 1000
             logging.info(red(str(timedelta(milliseconds=elapsed_time))))
-        logging.debug("\nFinished " + self.readable_command)
+        logging.debug("Finished " + self.readable_command)
 
 
 def howlong():
