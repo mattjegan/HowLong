@@ -38,8 +38,10 @@ class HowLong(object):
         parser = argparse.ArgumentParser(description='Time a process')
         parser.add_argument('-i', type=float, nargs='?', metavar='interval',
                             help='the timer interval, defaults to 1 second')
-        parser.add_argument('command', metavar='cmd', type=str, nargs=1,
+        parser.add_argument('-c', metavar='command', type=str, nargs=1,
                             help='a valid command')
+        parser.add_argument('-p', metavar='pid', type=int, nargs=1,
+                            help='a valid process id to monitor - see \'ps aux\'')
         parser.add_argument('-f', metavar='file', type=str, nargs=1,
                             help='output to file insted of stdout')
         parser.add_argument('-l', metavar='log level', nargs=1,
@@ -52,17 +54,23 @@ class HowLong(object):
 
         self.timer_interval = parsed_args.i if parsed_args.i else 1
 
-        self.command = parsed_args.command + parsed_args.command_args
-        self.readable_command = ' '.join(self.command)
-        self.log_file = parsed_args.f[0] if parsed_args.f else None
-
-        if parsed_args.command == ['pid']:
-            self.pid = int(parsed_args.command_args[0])
+        command = parsed_args.c if parsed_args.c else None
+        cmd_args = parsed_args.command_args if parsed_args.command_args else None
+        assert command is not None or cmd_args is None, "Can't have no command but have command args, \
+                             usage with command is: howlong [options] -c your_command your_options"
+        if parsed_args.p:
+            self.pid = int(parsed_args.p[0])
+            self.command = None
+            assert command is None, "can't have both -p and -c"
             assert self.pid in psutil.pids(), "argument p must be a valid pid, %d is not one" % pid
         else:
+            assert command is not None, "you must use either -p or -c"
             self.pid = None
-
-
+            cmd_args = [] if cmd_args is None else cmd_args
+            self.command = command + cmd_args
+        
+        self.log_file = parsed_args.f[0] if parsed_args.f else None
+        
         if parsed_args.l == ["ERROR"]:
             self.log_level = logging.ERROR
         elif parsed_args.l == ["DEBUG"]:
@@ -86,7 +94,7 @@ class HowLong(object):
             sleep(self.timer_interval)
             elapsed_time = (time() - start_time) * 1000
             logging.info(red(str(timedelta(milliseconds=elapsed_time))))
-        logging.debug("Finished " + self.readable_command)
+        logging.debug("Finished " + readable_command)
 
 
 def howlong():
