@@ -13,5 +13,5 @@ setup(author='Matthew Egan',
             ]
       },
       url='https://github.com/mattjegan/howlong',
-      version='0.0.1'
+      version='0.0.2'
 )
