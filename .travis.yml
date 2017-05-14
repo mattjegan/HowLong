@@ -12,7 +12,7 @@ install:
 
 script:
 - echo -e 'x=0\nfor i in range(0, 10000000):\n    x+=i\nprint(x)' > fake.py
-- howlong -i 1 python fake.py
+- howlong -i 1 -c python fake.py
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)
