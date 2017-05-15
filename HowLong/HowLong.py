@@ -97,8 +97,5 @@ class HowLong(object):
         logging.debug("Finished " + readable_command)
 
 
-def howlong():
+if __name__ == "__main__":
     HowLong().run()
-
-
-if __name__ == "__main__": howlong()
