@@ -13,8 +13,7 @@ setup(author='Matthew Egan',
             ]
       },
       install_requires=[
-      'psutil>=5.0.1',
-      'termcolor'      
+          'psutil>=5.0.1'   
       ],
       url='https://github.com/mattjegan/howlong',
       version='0.0.2'
