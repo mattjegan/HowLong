@@ -9,6 +9,11 @@ from subprocess import Popen
 from time import time, sleep
 import psutil
 
+def exception_handler(exception_type, exception, traceback):
+    '''hide traceback'''
+    print ("%s" % exception)
+sys.excepthook = exception_handler
+
 def red(text):
     RED = '\033[91m'
     END = '\033[0m'
