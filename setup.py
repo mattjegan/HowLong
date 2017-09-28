@@ -1,7 +1,6 @@
 from setuptools import setup
 
 setup(author='Matthew Egan',
-      author_email='matthewj.egan@hotmai.com',
       description='A simple timing utility for long running processes',
       name='howlong',
       py_modules=[
