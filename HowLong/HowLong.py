@@ -8,7 +8,14 @@ from datetime import timedelta
 from subprocess import Popen
 from time import time, sleep
 import psutil
+
+from colorama import init
 from termcolor import colored
+
+# use Colorama to make Termcolor work on Windows too
+init()
+
+# We can now use Termcolor for all colored text output & also OS independent.
 
 def red(text):
     RED = '\033[91m'
