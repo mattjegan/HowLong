@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(author='Matthew Egan',
       description='A simple timing utility for long running processes',
@@ -6,11 +6,16 @@ setup(author='Matthew Egan',
       py_modules=[
           'HowLong.HowLong',
       ],
+      packages=find_packages(),
       entry_points={
             'console_scripts': [
                   'howlong = HowLong.HowLong:howlong'
             ]
       },
+      install_requires=[
+          'psutil>=5.0.1'   
+      ],
       url='https://github.com/mattjegan/howlong',
       version='0.0.2'
 )
+
