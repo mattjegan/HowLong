@@ -9,10 +9,19 @@ from subprocess import Popen
 from time import time, sleep
 import psutil
 
+from colorama import init
+from termcolor import colored
+
+# use Colorama to make Termcolor work on Windows too
+init()
+
+# We can now use Termcolor for all colored text output & also OS independent.
+
 def exception_handler(exception_type, exception, traceback):
     '''hide traceback'''
     print ("%s" % exception)
 sys.excepthook = exception_handler
+
 
 def red(text):
     RED = '\033[91m'
@@ -94,12 +103,12 @@ class HowLong(object):
         process = Process(pid=self.pid,command=self.command)
         readable_command = process.command
         start_time = process.start_time
-        logging.debug("Running " + readable_command)
+        logging.debug(colored("Running " + readable_command), 'green')
         while process.is_running():
             sleep(self.timer_interval)
             elapsed_time = (time() - start_time) * 1000
-            logging.info(red(str(timedelta(milliseconds=elapsed_time))))
-        logging.debug("Finished " + readable_command)
+            logging.info(colored(str(timedelta(milliseconds=elapsed_time)), 'blue'))
+        logging.debug(colored("Finished " + readable_command), 'red')
 
 
 def howlong():
