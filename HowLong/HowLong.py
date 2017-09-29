@@ -17,6 +17,12 @@ init()
 
 # We can now use Termcolor for all colored text output & also OS independent.
 
+def exception_handler(exception_type, exception, traceback):
+    '''hide traceback'''
+    print ("%s" % exception)
+sys.excepthook = exception_handler
+
+
 def red(text):
     RED = '\033[91m'
     END = '\033[0m'
