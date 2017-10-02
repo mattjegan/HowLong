@@ -76,7 +76,7 @@ class HowLong(object):
             self.pid = int(parsed_args.p[0])
             self.command = None
             assert command is None, "can't have both -p and -c"
-            assert self.pid in psutil.pids(), "argument p must be a valid pid, %d is not one" % pid
+            assert self.pid in psutil.pids(), "argument p must be a valid pid, %d is not one" % self.pid
         else:
             assert command is not None, "you must use either -p or -c"
             self.pid = None
