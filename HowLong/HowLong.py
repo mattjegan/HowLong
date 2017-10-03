@@ -17,7 +17,7 @@ init()
 
 # We can now use Termcolor for all colored text output & also OS independent.
 
-def exception_handler(exception_type, exception, traceback):
+def exception_handler(dummy_exception_type, exception, dummy_traceback):
     '''hide traceback'''
     print ("%s" % exception)
 sys.excepthook = exception_handler
