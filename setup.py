@@ -13,13 +13,9 @@ setup(author='Matthew Egan',
             ]
       },
       install_requires=[
-      'argparse',
-      'logging',
-      'sys',
-      'datetime',
-      'subprocess',
-      'time',
-      'psutil'      
+      'psutil>=5.0.1',
+      'termcolor>=1.1.0',
+      'colorama>=0.3.9'      
       ],
       url='https://github.com/mattjegan/howlong',
       version='0.0.2'
