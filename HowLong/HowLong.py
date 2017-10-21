@@ -18,6 +18,7 @@ init()
 
 # We can now use Termcolor for all colored text output & also OS independent.
 
+
 def red(text):
     RED = '\033[91m'
     END = '\033[0m'
@@ -25,7 +26,8 @@ def red(text):
 
 
 class Process(object):
-    def __init__(self,pid=None,command=None):
+
+    def __init__(self, pid=None, command=None):
         self.pid = pid
         if self.pid is None:
             self.process = Popen(command)
@@ -42,8 +44,12 @@ class Process(object):
         else:
             return self.process.is_running()
 
+
 class HowLong(object):
+
     def __init__(self):
+        self.log_level = logging.INFO # default logging level
+
         parser = argparse.ArgumentParser(description='Time a process')
         parser.add_argument('-i', type=float, nargs='?', metavar='interval',
                             help='the timer interval, defaults to 1 second')
@@ -60,7 +66,7 @@ class HowLong(object):
                             nargs=argparse.REMAINDER,
                             help='additional arguments for target command')
         parser.add_argument('-m',
-                            help='list history of HowLong', action="store_true")
+                            help='list history of HowLong', action="store_true")# store_true so we don't need paramaters
         parser.add_argument('-mc', action="store_true",
                             help='clear history of HowLong')
         parsed_args = parser.parse_args()
@@ -71,7 +77,14 @@ class HowLong(object):
         cmd_args = parsed_args.command_args if parsed_args.command_args else None
         assert command is not None or cmd_args is None, "Can't have no command but have command args, \
                              usage with command is: howlong [options] -c your_command your_options"
-       
+
+        self.log_file = parsed_args.f[0] if parsed_args.f else None
+        if self.log_file:
+            logging.basicConfig(filename=self.log_file, level=self.log_level,
+                                format='%(levelname)s:%(message)s')
+        else:
+            logging.basicConfig(level=self.log_level,
+                                format='%(levelname)s:%(message)s')
 
         if parsed_args.p:
             self.pid = int(parsed_args.p[0])
@@ -81,66 +94,59 @@ class HowLong(object):
         else:
 
             if parsed_args.m:
-                try : 
+                try:
                     with open('history.txt', 'r') as f:
                         history = f.readlines()
                         for line in history:
-                            print(line.strip())
-                            
+                            logging.info(line.strip())
+
                 except:
-                    print("\nNo history avaialable\n")
+                    logging.warning("No history avaialable\n")
                 exit()
             elif parsed_args.mc:
                 if os.path.isfile('history.txt'):
                     try:
                         os.remove('history.txt')
-                        print('History deleted!\n')
+                        logging.warning('History deleted!\n')
                     except:
-                        print('Can\'t delete history!\n')
+                        logging.warning('Can\'t delete history!\n')
                 else:
-                    print('\nNo history found!')
+                    logging.warning('No history avaialable!\n')
                 exit()
             else:
                 assert command is not None, "you must use either -p or -c"
                 self.pid = None
                 cmd_args = [] if cmd_args is None else cmd_args
                 self.command = command + cmd_args
-        
-        self.log_file = parsed_args.f[0] if parsed_args.f else None
-        
+
         if parsed_args.l == ["ERROR"]:
             self.log_level = logging.ERROR
         elif parsed_args.l == ["DEBUG"]:
             self.log_level = logging.DEBUG
-        else:
-            self.log_level = logging.INFO
+
 
     def run(self):
-        if self.log_file:
-            logging.basicConfig(filename=self.log_file, level=self.log_level,
-                                format='%(levelname)s:%(message)s')
-        else:
-            logging.basicConfig(level=self.log_level,
-                                format='%(levelname)s:%(message)s')
-
-        process = Process(pid=self.pid,command=self.command)
+        process = Process(pid=self.pid, command=self.command)
         readable_command = process.command
         start_time = process.start_time
         logging.debug(colored("Running " + readable_command), 'green')
-        with open('history.txt', 'a') as history: # append process starting time to history
-            history.write("pid #{}  started at  {}\n".format(self.pid, ctime(int(start_time))))
+        with open('history.txt', 'a') as history:  # append process starting time to history
+            history.write("pid #{}  started at  {}\n".format(
+                self.pid, ctime(int(start_time))))
         while process.is_running():
             sleep(self.timer_interval)
             elapsed_time = (time() - start_time) * 1000
-            logging.info(colored(str(timedelta(milliseconds=elapsed_time)), 'blue'))
+            logging.info(
+                colored(str(timedelta(milliseconds=elapsed_time)), 'blue'))
         logging.debug(colored("Finished " + readable_command), 'red')
-        with open('history.txt', 'a') as history: # append process finishing time to history
-            history.write("pid #{}  finished at  {}\n".format(self.pid, ctime(int(time()))))
-        
+        with open('history.txt', 'a') as history:  # append process finishing time to history
+            history.write("pid #{}  finished at  {}\n".format(
+                self.pid, ctime(int(time()))))
 
 
 def howlong():
     HowLong().run()
 
 
-if __name__ == "__main__": howlong()
+if __name__ == "__main__":
+    howlong()
