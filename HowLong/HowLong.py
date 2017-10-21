@@ -16,6 +16,7 @@ from termcolor import colored
 # use Colorama to make Termcolor work on Windows too
 init()
 
+
 # We can now use Termcolor for all colored text output & also OS independent.
 
 
@@ -23,6 +24,12 @@ def red(text):
     RED = '\033[91m'
     END = '\033[0m'
     return RED + text + END
+
+def exception_handler(dummy_exception_type, exception, dummy_traceback):
+    '''hide traceback'''
+    print ("%s" % exception)
+sys.excepthook = exception_handler
+
 
 
 class Process(object):
@@ -90,7 +97,7 @@ class HowLong(object):
             self.pid = int(parsed_args.p[0])
             self.command = None
             assert command is None, "can't have both -p and -c"
-            assert self.pid in psutil.pids(), "argument p must be a valid pid, %d is not one" % pid
+            assert self.pid in psutil.pids(), "argument p must be a valid pid, %d is not one" % self.pid
         else:
 
             if parsed_args.m:
@@ -129,6 +136,7 @@ class HowLong(object):
         process = Process(pid=self.pid, command=self.command)
         readable_command = process.command
         start_time = process.start_time
+
         logging.debug(colored("Running " + readable_command), 'green')
         with open('history.txt', 'a') as history:  # append process starting time to history
             history.write("pid #{}  started at  {}\n".format(
@@ -142,6 +150,13 @@ class HowLong(object):
         with open('history.txt', 'a') as history:  # append process finishing time to history
             history.write("pid #{}  finished at  {}\n".format(
                 self.pid, ctime(int(time()))))
+        logging.debug(colored("Running " + readable_command, 'green'))
+        while process.is_running():
+            sleep(self.timer_interval)
+            elapsed_time = (time() - start_time) * 1000
+            logging.info(colored(str(timedelta(milliseconds=elapsed_time)), 'blue'))
+        logging.debug(colored("Finished " + readable_command, 'red'))
+
 
 
 def howlong():
