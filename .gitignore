@@ -54,6 +54,7 @@ coverage.xml
 # PyBuilder
 target/
 
+history.txt
 .venv
 fake.py
 .vscode

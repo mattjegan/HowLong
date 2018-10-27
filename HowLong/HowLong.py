@@ -25,11 +25,18 @@ def red(text):
     END = '\033[0m'
     return RED + text + END
 
+
 def exception_handler(dummy_exception_type, exception, dummy_traceback):
     '''hide traceback'''
-    print ("%s" % exception)
+    print("%s" % exception)
 sys.excepthook = exception_handler
 
+
+def error_and_exit(*args):
+    '''Print each argument to stderr, then exit with non-zero exit code.'''
+    for arg in args:
+        print(arg, file=sys.stderr)
+    sys.exit(-1)
 
 
 class Process(object):
@@ -55,15 +62,17 @@ class Process(object):
 class HowLong(object):
 
     def __init__(self):
-        self.log_level = logging.INFO # default logging level
+        self.log_level = logging.INFO  # default logging level
 
         parser = argparse.ArgumentParser(description='Time a process')
         parser.add_argument('-i', type=float, nargs='?', metavar='interval',
                             help='the timer interval, defaults to 1 second')
-        parser.add_argument('-c', metavar='command', type=str, nargs=1,
-                            help='a valid command')
-        parser.add_argument('-p', metavar='pid', type=int, nargs=1,
-                            help='a valid process id to monitor - see \'ps aux\'')
+
+        group = parser.add_mutually_exclusive_group()
+        group.add_argument('-c', metavar='command', type=str, nargs=1,
+                           help='a valid command')
+        group.add_argument('-p', metavar='pid', type=int, nargs=1,
+                           help="a valid process id to monitor - see 'ps aux'")
         parser.add_argument('-f', metavar='file', type=str, nargs=1,
                             help='output to file insted of stdout')
         parser.add_argument('-l', metavar='log level', nargs=1,
@@ -72,8 +81,10 @@ class HowLong(object):
         parser.add_argument('command_args', metavar='cmd_args', type=str,
                             nargs=argparse.REMAINDER,
                             help='additional arguments for target command')
+        # store_true so we don't need paramaters
         parser.add_argument('-m',
-                            help='list history of HowLong', action="store_true")# store_true so we don't need paramaters
+                            help='list history of HowLong',
+                            action="store_true")
         parser.add_argument('-mc', action="store_true",
                             help='clear history of HowLong')
         parsed_args = parser.parse_args()
@@ -81,9 +92,12 @@ class HowLong(object):
         self.timer_interval = parsed_args.i if parsed_args.i else 1
 
         command = parsed_args.c if parsed_args.c else None
-        cmd_args = parsed_args.command_args if parsed_args.command_args else None
-        assert command is not None or cmd_args is None, "Can't have no command but have command args, \
-                             usage with command is: howlong [options] -c your_command your_options"
+        cmd_args = parsed_args.command_args or None
+
+        if command is None and cmd_args:
+            error_and_exit("Can't have no command but have command args",
+                           "usage with command is: "
+                           "howlong [options] -c your_command your_options")
 
         self.log_file = parsed_args.f[0] if parsed_args.f else None
         if self.log_file:
@@ -96,8 +110,9 @@ class HowLong(object):
         if parsed_args.p:
             self.pid = int(parsed_args.p[0])
             self.command = None
-            assert command is None, "can't have both -p and -c"
-            assert self.pid in psutil.pids(), "argument p must be a valid pid, %d is not one" % self.pid
+            if self.pid not in psutil.pids():
+                error_and_exit("argument p must be a valid pid, "
+                               "%d is not one" % self.pid)
         else:
 
             if parsed_args.m:
@@ -121,7 +136,8 @@ class HowLong(object):
                     logging.warning('No history avaialable!\n')
                 exit()
             else:
-                assert command is not None, "you must use either -p or -c"
+                if command is None:
+                    error_and_exit("you must use either -p or -c")
                 self.pid = None
                 cmd_args = [] if cmd_args is None else cmd_args
                 self.command = command + cmd_args
@@ -131,14 +147,14 @@ class HowLong(object):
         elif parsed_args.l == ["DEBUG"]:
             self.log_level = logging.DEBUG
 
-
     def run(self):
         process = Process(pid=self.pid, command=self.command)
         readable_command = process.command
         start_time = process.start_time
 
         logging.debug(colored("Running " + readable_command), 'green')
-        with open('history.txt', 'a') as history:  # append process starting time to history
+        # append process starting time to history
+        with open('history.txt', 'a') as history:
             history.write("pid #{}  started at  {}\n".format(
                 self.pid, ctime(int(start_time))))
         while process.is_running():
@@ -147,16 +163,17 @@ class HowLong(object):
             logging.info(
                 colored(str(timedelta(milliseconds=elapsed_time)), 'blue'))
         logging.debug(colored("Finished " + readable_command), 'red')
-        with open('history.txt', 'a') as history:  # append process finishing time to history
+        # append process finishing time to history
+        with open('history.txt', 'a') as history:
             history.write("pid #{}  finished at  {}\n".format(
                 self.pid, ctime(int(time()))))
         logging.debug(colored("Running " + readable_command, 'green'))
         while process.is_running():
             sleep(self.timer_interval)
             elapsed_time = (time() - start_time) * 1000
-            logging.info(colored(str(timedelta(milliseconds=elapsed_time)), 'blue'))
+            logging.info(colored(str(timedelta(milliseconds=elapsed_time)),
+                                 'blue'))
         logging.debug(colored("Finished " + readable_command, 'red'))
-
 
 
 def howlong():
