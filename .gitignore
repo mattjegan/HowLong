@@ -53,3 +53,7 @@ coverage.xml
 
 # PyBuilder
 target/
+
+.venv
+fake.py
+.vscode
