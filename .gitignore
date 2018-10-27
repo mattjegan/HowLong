@@ -54,4 +54,7 @@ coverage.xml
 # PyBuilder
 target/
 
-history.txt # Ignore this because running the program generates it.
+history.txt
+.venv
+fake.py
+.vscode
