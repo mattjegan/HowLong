@@ -58,3 +58,4 @@ history.txt
 .venv
 fake.py
 .vscode
+*~

@@ -1,8 +1,6 @@
 language: python
 python:
 - 2.7
-- 3.2
-- 3.3
 - 3.4
 - 3.5
 - 3.6
@@ -14,6 +12,7 @@ install:
 script:
 - echo -e 'x=0\nfor i in range(0, 10000000):\n    x+=i\nprint(x)' > fake.py
 - howlong -i 1 -c python fake.py
+- pytest
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)
