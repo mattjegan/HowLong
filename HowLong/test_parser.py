@@ -1,6 +1,7 @@
-import unittest
-from HowLong import HowLong
+from __future__ import absolute_import
 
+import unittest
+from HowLong.HowLong import HowLong
 
 class TestParser(unittest.TestCase):
 
@@ -13,7 +14,7 @@ class TestParser(unittest.TestCase):
         '''Tests with no arguments
             At least one argument is required.
         '''
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(SystemExit):
             self.parser()
 
     def test_c_option_with_empty_arguments(self):
@@ -29,7 +30,3 @@ class TestParser(unittest.TestCase):
         '''
         with self.assertRaises(TypeError):
             self.parser('-p')
-
-
-if __name__ == "__main__":
-    unittest.main()
