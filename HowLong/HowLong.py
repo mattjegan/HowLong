@@ -89,7 +89,7 @@ class HowLong(object):
                             help='clear history of HowLong')
         parsed_args = parser.parse_args()
 
-        self.timer_interval = parsed_args.i if parsed_args.i else 1
+        self.timer_interval = parsed_args.i if parsed_args.i else 0.1
 
         command = parsed_args.c if parsed_args.c else None
         cmd_args = parsed_args.command_args or None
